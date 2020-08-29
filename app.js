@@ -10,6 +10,8 @@ const cors = require("cors");
 
 const mongoose = require("mongoose");
 
+const userRoutes = require("./routes/user");
+
 const app = express();
 
 //HTTP headers
@@ -50,6 +52,9 @@ app.use(xss());
 
 //HTTP parament pollution
 app.use(hpp());
+
+//REGISTER ROUTES HERE
+app.use("/api/v1/user", userRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({
