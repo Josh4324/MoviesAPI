@@ -22,7 +22,7 @@ exports.signUp = async (req, res) => {
         // create new user if user does not exists
         const newUser = await User.create(req.body);
 
-        // create a token
+        // create user token
         const token = jwt.sign({
                 id: newUser._id,
                 role: newUser.role
@@ -46,5 +46,46 @@ exports.signUp = async (req, res) => {
         }
         // return error response
         return errorResMsg(res, errCode, err);
+    }
+}
+
+
+exports.logIn = async (req, res) => {
+    try {
+        const {
+            email,
+            password
+        } = req.body
+        // check if user exists and select password
+        const user = await User.findOne({
+            email
+        }).select("+password");
+
+        // check if user exists and if the password is correct
+        if (!user || !(await user.correctPassword(password, user.password))) {
+            // return error message if password is wrong
+            return errorResMsg(res, 401, "Incorrect email or password");
+        }
+
+        // create user token
+        const token = jwt.sign({
+                id: user._id,
+                role: user.role
+            },
+            process.env.JWT_SECRET
+        );
+
+         // create data to be returned
+        const data = {
+            id: user._id,
+            role: user.role,
+            token
+        }
+        // return succesfull response
+        return successResMsg(res, 200, data);
+
+    } catch (err) {
+        // return error response
+        return errorResMsg(res, 500, err);
     }
 }
