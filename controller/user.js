@@ -24,16 +24,16 @@ exports.signUp = async (req, res) => {
 
         // create user token
         const token = jwt.sign({
-                id: newUser._id,
-                role: newUser.role
+                user_id: newUser._id,
             },
-            process.env.JWT_SECRET
+            process.env.JWT_SECRET, {
+                expiresIn: process.env.JWT_EXPIRES_IN,
+              }
         );
 
         // create data to be returned
         const data = {
             id: newUser._id,
-            role: newUser.role,
             token
         }
         // return succesfull response
@@ -69,16 +69,16 @@ exports.logIn = async (req, res) => {
 
         // create user token
         const token = jwt.sign({
-                id: user._id,
-                role: user.role
+                user_id: user._id,
             },
-            process.env.JWT_SECRET
+            process.env.JWT_SECRET, {
+                expiresIn: process.env.JWT_EXPIRES_IN,
+              }
         );
 
          // create data to be returned
         const data = {
             id: user._id,
-            role: user.role,
             token
         }
         // return succesfull response

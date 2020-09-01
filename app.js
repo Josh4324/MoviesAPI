@@ -82,7 +82,8 @@ mongoose
     useUnifiedTopology: true,
     useFindAndModify: false,
   })
-  .then((c) => console.log("DATABASE connection successfull"));
+  .then((c) => console.log("DATABASE connection successfull"))
+  .catch((err)=> console.log("Database connection failed"))
 
 const port = process.env.PORT || 4000;
 
