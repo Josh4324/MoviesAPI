@@ -57,12 +57,37 @@ exports.addMovie = async (req, res) => {
 
         const newMovie = await Movie.create(req.body);
 
-         // return success response
+        // return success response
         return successResMsg(res, 200, newMovie);
     } catch (err) {
-        if (err._message === "Movie validation failed"){
+        if (err._message === "Movie validation failed") {
             errCode = 423;
-        }else {
+        } else {
+            errCode = 500;
+        }
+        // return error response
+        return errorResMsg(res, errCode, err);
+    }
+}
+
+exports.editMovieRating = async (req, res) => {
+    let errCode
+    try {
+        const {
+            rating
+        } = req.body
+        const updatedMovie = await Movie.findByIdAndUpdate(req.params.movie_id, {
+            rating
+        }, {
+            new: true,
+        })
+
+        // return success response
+        return successResMsg(res, 200, updatedMovie);
+    } catch (err) {
+        if (err._message === "Movie validation failed") {
+            errCode = 423;
+        } else {
             errCode = 500;
         }
         // return error response
