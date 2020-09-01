@@ -94,3 +94,15 @@ exports.editMovieRating = async (req, res) => {
         return errorResMsg(res, errCode, err);
     }
 }
+
+exports.removeMovie = async (req, res) => {
+    try {
+        // remove movie from list
+        const removedMovie = await Movie.findByIdAndDelete({_id:req.params.movie_id});
+        // return success response
+        return successResMsg(res, 200, removedMovie);
+    } catch (err) {
+        // return error response
+        return errorResMsg(res, 500, err);
+    }
+}
