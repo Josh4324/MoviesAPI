@@ -11,6 +11,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const userRoutes = require("./routes/user");
+const movieRoutes = require("./routes/movie");
 
 const app = express();
 
@@ -55,6 +56,7 @@ app.use(hpp());
 
 //REGISTER ROUTES HERE
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/movie", movieRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({
