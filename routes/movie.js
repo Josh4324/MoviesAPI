@@ -7,6 +7,8 @@ const auth = require("../middleware/auth");
 router.get('/', auth.authentication(), movieController.getMovies);
 // add a movie to user list
 router.post('/', auth.authentication(), movieController.addMovie);
+// edit movie rating
+router.patch('/:movie_id', auth.authentication(), movieController.editMovieRating);
 
 
 
