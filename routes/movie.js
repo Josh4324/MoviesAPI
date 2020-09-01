@@ -9,7 +9,8 @@ router.get('/', auth.authentication(), movieController.getMovies);
 router.post('/', auth.authentication(), movieController.addMovie);
 // edit movie rating
 router.patch('/:movie_id', auth.authentication(), movieController.editMovieRating);
-
+// remove movie from list
+router.delete('/:movie_id', auth.authentication(), movieController.removeMovie);
 
 
 
