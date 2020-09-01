@@ -1,4 +1,6 @@
 const axios = require("axios")
+const jwt = require("jsonwebtoken");
+const Movie = require("../model/movie");
 const {
     successResMsg,
     errorResMsg
@@ -7,7 +9,6 @@ const {
     response
 } = require("express");
 
-// Moviies Controller
 
 //get movies (200)
 exports.getMovies = async (req, res) => {
@@ -37,10 +38,34 @@ exports.getMovies = async (req, res) => {
 
         const results = [...res1.data.results, ...res2.data.results, ...res3.data.results, ...res4.data.results, ...res5.data.results, ...res6.data.results, ...res7.data.results, ...res8.data.results, ...res9.data.results, ...res10.data.results, ]
         // return success response
-        console.log(results.length)
         return successResMsg(res, 200, results);
     })).catch(err => {
         // return error response
         return errorResMsg(res, 500, err);
     });
+}
+
+
+exports.addMovie = async (req, res) => {
+    let errCode
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const id = decodedToken.user_id;
+
+        req.body.user = id
+
+        const newMovie = await Movie.create(req.body);
+
+         // return success response
+        return successResMsg(res, 200, newMovie);
+    } catch (err) {
+        if (err._message === "Movie validation failed"){
+            errCode = 423;
+        }else {
+            errCode = 500;
+        }
+        // return error response
+        return errorResMsg(res, errCode, err);
+    }
 }
