@@ -45,6 +45,28 @@ exports.getMovies = async (req, res) => {
     });
 }
 
+exports.getList = async (req, res) => {
+
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const id = decodedToken.user_id;
+
+        const myListMovies = await Movie.find({
+            user: id
+        })
+
+
+
+        // return success response
+        return successResMsg(res, 200, myListMovies);
+    } catch (err) {
+        // return error response
+        return errorResMsg(res, 500, err);
+    }
+}
+
+
 
 exports.addMovie = async (req, res) => {
     let errCode
@@ -98,7 +120,9 @@ exports.editMovieRating = async (req, res) => {
 exports.removeMovie = async (req, res) => {
     try {
         // remove movie from list
-        const removedMovie = await Movie.findByIdAndDelete({_id:req.params.movie_id});
+        const removedMovie = await Movie.findByIdAndDelete({
+            _id: req.params.movie_id
+        });
         // return success response
         return successResMsg(res, 200, removedMovie);
     } catch (err) {
