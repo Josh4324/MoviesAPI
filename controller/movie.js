@@ -55,9 +55,6 @@ exports.getList = async (req, res) => {
         const myListMovies = await Movie.find({
             user: id
         })
-
-
-
         // return success response
         return successResMsg(res, 200, myListMovies);
     } catch (err) {
